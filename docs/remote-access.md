@@ -9,24 +9,39 @@ While using a VPN is possible, SSH is preferred for its simplicity of setup. Exp
 
 ## SSH Key Configuration
 
-1. Generate an SSH key on the local machine:
+Two approaches are available — choose one.
 
-   ```bash
-   ssh-keygen -t ed25519 -C "server-access"
-   ```
+### Bitwarden SSH Agent (recommended, cross-platform)
 
-   > **Security: always set a passphrase.** Without a passphrase, the private key is stored in plaintext on disk. If the client machine is stolen or compromised, an attacker can connect directly to the server. The passphrase encrypts the private key locally — even if the file is stolen, it is useless without it.
-   > To add a passphrase to an existing key: `ssh-keygen -p -f ~/.ssh/id_ed25519`
+The key is generated and stored inside Bitwarden Desktop, which acts as the SSH agent. The private key never exists as a file on disk; access is protected by the master password / biometrics.
 
-2. Copy the key to the server:
+1. In Bitwarden Desktop, enable the SSH agent (Settings → Security → SSH Agent) and create a new SSH key. Follow the [official Bitwarden SSH Agent documentation](https://bitwarden.com/help/ssh-agent/) for the per-OS setup and the exact `IdentityAgent` path to add to `~/.ssh/config`.
+
+   On macOS / Linux, `IdentityAgent` can be scoped to a single `Host` in `~/.ssh/config` so Bitwarden is only used for this server (not possible on Windows, where it applies globally).
+
+2. Once the agent is configured and unlocked, copy the key to the server:
 
    ```bash
    ssh-copy-id user_name@server
    ```
 
-3. To avoid re-entering the passphrase on every connection, store it in a key manager:
+### Local key
 
-   **macOS (Keychain + TouchID):**
+The key lives on disk. Always protect it with a passphrase — without one, the private key is stored in plaintext, and a stolen machine means direct server access.
+
+1. Generate the key:
+
+   ```bash
+   ssh-keygen
+   ```
+
+2. Copy it to the server:
+
+   ```bash
+   ssh-copy-id user_name@server
+   ```
+
+3. **Optional (macOS only):** to avoid re-entering the passphrase on every connection, register it in the macOS Keychain.
 
    Add to `~/.ssh/config`:
 
@@ -36,13 +51,13 @@ While using a VPN is possible, SSH is preferred for its simplicity of setup. Exp
          UseKeychain yes
    ```
 
-   Then register the key in the Keychain:
+   Then:
 
    ```bash
    ssh-add --apple-use-keychain ~/.ssh/id_ed25519
    ```
 
-   The passphrase will be automatically unlocked with the macOS session (TouchID / session password). Locked session = key inaccessible.
+   The passphrase is automatically unlocked with the macOS session (TouchID / session password). Locked session = key inaccessible.
 
 ## Server Hardening
 
