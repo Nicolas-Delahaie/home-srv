@@ -107,7 +107,7 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - ./z2m/data:/app/data
+      - z2m_data:/app/data
     devices:
       - /dev/serial/by-id/${ZIGBEE_USB}:/dev/ttyUSB0
     environment:
@@ -379,6 +379,7 @@ services:
 volumes:
   vw_data:
   portainer_data:
+  z2m_data:
   traefik_certs:
   loki_data:
   grafana_data:

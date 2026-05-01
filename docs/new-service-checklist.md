@@ -6,7 +6,7 @@ This document lists the steps to remember when creating a new service.
 
 1. **CrowdSec**: look for a collection that covers the service's logs
 2. **Traefik labels**: add the `errp-redirect@file` middleware
-3. **Volumes**: add `:ro` whenever possible
+3. **Volumes**: add `:ro` whenever possible. Use a **named volume** for opaque runtime data (DBs, caches, internal state) and a **bind mount** only when files inside are versioned in git or edited/inspected manually
 4. **Environment variables**: if there are many, split between `env_file` and `environment`
 5. **Documentation**: document the required and optional steps in the README
 
