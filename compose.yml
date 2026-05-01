@@ -346,13 +346,14 @@ services:
       - no-new-privileges:true
     labels:
       traefik.enable: true
-      traefik.http.routers.ollama.middlewares: authelia@file,errp-redirect@file
+      traefik.http.routers.ollama.middlewares: errp-redirect@file
       traefik.http.services.ollama.loadbalancer.server.port: 8080
     environment:
-      - WEBUI_AUTH=false
+      - WEBUI_AUTH=true
       - WEBUI_URL=https://ollama.${DOMAIN}
       - OLLAMA_BASE_URLS=http://localhost:11434;http://${DOCKER_GATEWAY_IP}:11434
       - ENABLE_PERSISTENT_CONFIG=false
+      - DEFAULT_USER_ROLE=admin
     volumes:
       - ollama_datas:/root/.ollama
       - open_webui_datas:/app/backend/data
