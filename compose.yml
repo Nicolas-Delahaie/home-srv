@@ -283,6 +283,17 @@ services:
       authelia: # Necessary for authelia.log to be created
         condition: service_healthy
 
+  adguard:
+    image: adguard/adguardhome:latest
+    network_mode: host
+    volumes:
+      - ./adguard/AdGuardHome.yaml:/opt/adguardhome/conf/AdGuardHome.yaml:ro
+      - ./adguard/data:/opt/adguardhome/work
+    labels:
+      traefik.enable: true
+      traefik.http.routers.adguard.middlewares: authelia@file,errp-redirect@file
+      traefik.http.services.adguard.loadbalancer.server.url: "http://${DOCKER_GATEWAY_IP}:3000"
+
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     security_opt:
