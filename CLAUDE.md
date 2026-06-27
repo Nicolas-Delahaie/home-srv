@@ -71,7 +71,8 @@ docker compose restart <service>
 
 ## Contribution Rules
 
-- **Language**: all code (variables, functions, inline comments, config file names) must be in **English**. READMEs, commits, documentation (`docs/`) and user-facing messages are also in **English**
+- **Language**: all code (variables, functions, inline comments, config file names) must be in **English**. READMEs, documentation (`docs/`) and user-facing messages are also in **English**
+- **Commits**: follow [Conventional Commits](https://www.conventionalcommits.org) — `type(scope): subject` (e.g. `fix(traefik): ...`). Common types: `feat`, `fix`, `docs`, `refactor`, `chore`. Scope = service name (`traefik`, `ha`, `cs`…). Commit messages are written in **French**
 - **Configuration**: any sensitive value must be in `.env` (never hardcoded in YAML files)
 - **Environment variables**: use `${VAR}` in compose.yml, document in `.env.template`
 - **Git-ignored files**: `.env`, HA/Frigate/Z2M runtime configs, logs, media (see `.gitignore`)
