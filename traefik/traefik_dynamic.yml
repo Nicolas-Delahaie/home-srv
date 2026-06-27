@@ -11,12 +11,12 @@ http:
       errors:
         status: "400-599"
         service: errp@docker
-        query: /{status}.html
+        query: /{status}
     authelia:
       forwardAuth:
         address: "http://authelia:9091/api/authz/forward-auth"
         trustForwardHeader: true
-        maxResponseBodySize: 10485760
+        maxResponseBodySize: -1
 
 tls:
   options:
