@@ -173,3 +173,7 @@ Ports not forwarded by the router remain accessible on the LAN, but are not inse
 ## Server Configuration
 
 For server configuration, follow the documentation [here](./docs/server-setup.md).
+
+## VPN access (WireGuard)
+
+If you connect to the home network via WireGuard VPN, manual DNS configuration is required for ad blocking and local domain resolution to work — see [docs/wireguard-vpn.md](./docs/wireguard-vpn.md).

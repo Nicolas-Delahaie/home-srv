@@ -94,6 +94,7 @@ Consult these files based on the task context:
 | Local network / APIPA               | `docs/offline-network.md`       |
 | Router / DNS configuration          | `docs/router-setup.md`          |
 | Local DNS (dnsmasq)                 | `docs/dnsmasq.md`               |
+| VPN WireGuard DNS                   | `docs/wireguard-vpn.md`         |
 
 Service subdirectories also contain `CLAUDE.md` files with service-specific rules:
 
