@@ -119,15 +119,18 @@ filters:
 whitelist_filters: []
 user_rules: []
 dhcp:
-  enabled: false
-  interface_name: ""
+  enabled: true
+  interface_name: ${SERVER_IFACE}
   local_domain_name: lan
   dhcpv4:
-    gateway_ip: ""
-    subnet_mask: ""
-    range_start: ""
-    range_end: ""
-    lease_duration: 86400
+    gateway_ip: ${GATEWAY_IP}
+    subnet_mask: 255.255.255.0
+    range_start: ${ADGUARD_DHCP_RANGE_START}
+    range_end: ${ADGUARD_DHCP_RANGE_END}
+    lease_duration: ${ADGUARD_DHCP_LEASE_DURATION}
+    icmp_timeout_msec: 1000
+    options: []
+  # IPv6 not handled : Freebox does SLAAC + RA, that's enough for the LAN
   dhcpv6:
     range_start: ""
     lease_duration: 86400
@@ -153,7 +156,12 @@ filtering:
   blocking_mode: default
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
+  # Rewrites disabled until the LAN subnet migration to 10.50.50.0/24
+  # (re-enable the block below once the migration is done)
   rewrites: []
+  # rewrites:
+  #   - domain: '*.nicolas-delahaie.fr'
+  #     answer: 192.168.1.1
   safe_fs_patterns:
     - /opt/adguardhome/work/userfilters/*
   safebrowsing_cache_size: 1048576

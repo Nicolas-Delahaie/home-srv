@@ -286,13 +286,23 @@ services:
   adguard:
     image: adguard/adguardhome:latest
     network_mode: host
+    entrypoint: /entrypoint.sh
     volumes:
-      - ./adguard/AdGuardHome.yaml:/opt/adguardhome/conf/AdGuardHome.yaml:ro
-      - ./adguard/data:/opt/adguardhome/work
+      - ./adguard/AdGuardHome.yaml:/tmp/AdGuardHome.yaml:ro
+      - ./adguard/entrypoint.sh:/entrypoint.sh:ro
+      - adguard_data:/opt/adguardhome/work
+    environment:
+      - DOMAIN
+      - SERVER_IP
+      - SERVER_IFACE
+      - GATEWAY_IP
+      - ADGUARD_DHCP_RANGE_START
+      - ADGUARD_DHCP_RANGE_END
+      - ADGUARD_DHCP_LEASE_DURATION
     labels:
       traefik.enable: true
       traefik.http.routers.adguard.middlewares: authelia@file,errp-redirect@file
-      traefik.http.services.adguard.loadbalancer.server.url: "http://${DOCKER_GATEWAY_IP}:3000"
+      traefik.http.services.adguard.loadbalancer.server.url: "http://${DOCKER_GATEWAY_IP}:3000" # Port accessible en local
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -399,6 +409,7 @@ volumes:
   prowlarr_config:
   ollama_datas:
   open_webui_datas:
+  adguard_data:
 
 networks:
   default:
