@@ -1,3 +1,9 @@
 {
-  "remote.autoForwardPorts": false
+  "remote.autoForwardPorts": false,
+  "search.exclude": {
+    ".claude/worktrees/**": true
+  },
+  "files.watcherExclude": {
+    ".claude/worktrees/**": true
+  }
 }
