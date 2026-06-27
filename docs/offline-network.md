@@ -32,6 +32,83 @@ Configuration on the host machine (usually already active by default):
 
 Once the Ethernet cable is connected, the devices automatically assign themselves an IP address in the 169.254.x.x range and establish the connection.
 
-## DHCP Server on Host
+## DHCP Server on Host (dnsmasq)
 
-To configure a DHCP server on the host machine using `dnsmasq`, follow the documentation [here](./dnsmasq.md#dhcp-configuration).
+Gives full control over the DHCP range and gateway, unlike Internet Sharing. The host becomes an isolated DHCP server.
+
+1. **Install dnsmasq on the host machine (macOS)**
+
+   ```bash
+   brew install dnsmasq
+   ```
+
+2. **Configure dnsmasq** in `/opt/homebrew/etc/dnsmasq.conf`:
+
+   ```ini
+   # Sole DHCP server on the network
+   dhcp-authoritative
+   # Interface, range, netmask, lease duration (adapt to your setup)
+   dhcp-range=192.168.10.50,192.168.10.150,255.255.255.0,24h
+   # Default gateway = host machine's static IP
+   dhcp-option=3,192.168.10.1
+   # Limit DNS responses to local networks
+   local-service
+   ```
+
+   > The starting IP must be higher than the host's static IP.
+   > To limit to a specific interface: `dhcp-option=en11,3,192.168.10.1`
+
+3. **Set a static IP on the host's Ethernet interface**
+
+   Settings > Network > Ethernet > TCP/IP:
+   - Configure IPv4: Manually
+   - IP Address: `192.168.10.1`
+   - Subnet mask: `255.255.255.0`
+
+4. **Configure the server as a DHCP client**
+
+   ```bash
+   sudo nmtui
+   # Edit connection > Ethernet > IPv4: Automatic (DHCP)
+   ```
+
+5. **Start dnsmasq**
+
+   ```bash
+   sudo brew services restart dnsmasq
+   ```
+
+6. Connect the Ethernet cable — the server will receive an IP automatically.
+
+### DNS: resolve local subdomains on the host
+
+To access `*.localhost` services locally (same conditions as production):
+
+Add to `/opt/homebrew/etc/dnsmasq.conf`:
+
+```ini
+address=/.localhost/127.0.0.1
+```
+
+Then create a resolver:
+
+```bash
+sudo mkdir -p /etc/resolver
+echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/localhost
+```
+
+### Debugging
+
+```bash
+# Real-time DNS/DHCP log
+tail -f /opt/homebrew/var/log/dnsmasq.log
+
+# Check port 53
+sudo lsof -i UDP:53 -i TCP:53
+
+# DNS queries
+dig @127.0.0.1 <domain> +short
+
+# Flush DNS cache (macOS)
+sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder
+```
