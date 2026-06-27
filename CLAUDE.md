@@ -33,7 +33,7 @@ cs/config/                     # CrowdSec (parsers, scenarios, collections)
 vw/                            # Vaultwarden
 glances/                       # System monitoring config
 grdf/                          # Gas meter readings (Gazpar)
-host_configs/                  # Host system files (systemd service)
+home-srv.service               # systemd service to auto-start Docker Compose on boot
 docs/                          # Documentation (setup, access, network, drawio)
 streaming/                     # Downloads and media library
 ```

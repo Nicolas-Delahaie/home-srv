@@ -128,7 +128,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
 6. (Optional) To enable automatic service startup when the server boots, create this `systemctl` auto-start service:
 
    ```bash
-   sudo cp host_configs/home-srv.service /etc/systemd/system/
+   sudo cp home-srv.service /etc/systemd/system/
    sudo sed -i "s|<REPO_PATH>|$(pwd)|" /etc/systemd/system/home-srv.service
    sudo systemctl enable home-srv
    ```
