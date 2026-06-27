@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-template="/etc/traefik/traefik_static_template.yml"
+template="/etc/traefik/traefik_static.yml"
 output="/etc/traefik/traefik.yml"
 CURRENT_DATE="$(date +"%Y_%m_%d-%H_%M_%S")"
 LOG_DIR="/logs"
