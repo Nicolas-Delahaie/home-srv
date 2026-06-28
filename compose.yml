@@ -299,9 +299,11 @@ services:
       - ADGUARD_DHCP_RANGE_START
       - ADGUARD_DHCP_RANGE_END
       - ADGUARD_DHCP_LEASE_DURATION
+      - ADGUARD_USER
+      - ADGUARD_PASSWORD_HASH
     labels:
       traefik.enable: true
-      traefik.http.routers.adguard.middlewares: authelia@file,errp-redirect@file
+      traefik.http.routers.adguard.middlewares: errp-redirect@file
       traefik.http.services.adguard.loadbalancer.server.url: "http://${DOCKER_GATEWAY_IP}:3000" # Port accessible en local
 
   radarr:
