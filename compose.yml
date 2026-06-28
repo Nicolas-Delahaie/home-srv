@@ -360,23 +360,6 @@ services:
     cpus: ${OLLAMA_CPUS}
     mem_limit: ${OLLAMA_MEM}
 
-  test:
-    build: ./tests
-    profiles:
-      - test
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./tests/reports:/reports
-    environment:
-      - TEST_DOMAIN=${DOMAIN}
-      - TEST_PUBLIC_IP=${PUBLIC_IP}
-      - TEST_SERVER_IP=${SERVER_IP}
-      - TEST_AUTHELIA_USER=${AUTHELIA_TEST_USER}
-      - TEST_AUTHELIA_PASSWORD=${AUTHELIA_TEST_PASSWORD}
-      - TEST_MQTT_USER=${MQTT_LAN_USER}
-      - TEST_MQTT_PASSWORD=${MQTT_LAN_PASSWORD}
-      - TEST_HA_TOKEN=${HA_TEST_TOKEN}
-
 volumes:
   vw_data:
   portainer_data:
