@@ -9,7 +9,7 @@ While using a VPN is possible, SSH is preferred for its simplicity of setup. Exp
 
 ## SSH Key Configuration
 
-Two approaches are available — choose one.
+Two approaches are available for interactive (dev) access — choose one. Both register a public key on the server; the difference is where the private key lives. The automated Ollama tunnel does **not** use these keys: it relies on a local on-disk key locked down server-side (see [Securing the Tunnel Key](#securing-the-tunnel-key)).
 
 ### Bitwarden SSH Agent (recommended, cross-platform)
 
@@ -17,7 +17,7 @@ The key is generated and stored inside Bitwarden Desktop, which acts as the SSH 
 
 1. In Bitwarden Desktop, enable the SSH agent (Settings → Security → SSH Agent) and create a new SSH key. Follow the [official Bitwarden SSH Agent documentation](https://bitwarden.com/help/ssh-agent/) for the per-OS setup and the exact `IdentityAgent` path to add to `~/.ssh/config`.
 
-   On macOS / Linux, `IdentityAgent` can be scoped to a single `Host` in `~/.ssh/config` so Bitwarden is only used for this server (not possible on Windows, where it applies globally).
+   On macOS / Linux, `IdentityAgent` can be scoped to a single `Host` in `~/.ssh/config` so Bitwarden is only used for this server (not possible on Windows, where it applies globally). **Scope it per-host:** otherwise an unlocked Bitwarden session exposes _every_ key it holds to any `ssh` command run from that machine — including access to all your other registered SSH hosts.
 
 2. Once the agent is configured and unlocked, copy the key to the server:
 
@@ -35,20 +35,20 @@ The key lives on disk. Always protect it with a passphrase — without one, the 
    ssh-keygen
    ```
 
-2. Copy it to the server:
+   2. Copy it to the server:
 
    ```bash
    ssh-copy-id user_name@server
    ```
 
-3. **Optional (macOS only):** to avoid re-entering the passphrase on every connection, register it in the macOS Keychain.
+2. **Optional (macOS only):** to avoid re-entering the passphrase on every connection, register it in the macOS Keychain.
 
    Add to `~/.ssh/config`:
 
    ```conf
    Host *
-         AddKeysToAgent yes
-         UseKeychain yes
+      AddKeysToAgent yes
+      UseKeychain yes
    ```
 
    Then:
@@ -116,7 +116,7 @@ Exposes the Ollama instance running on a Mac (Apple Silicon) to the server's Ope
 
 ### Prerequisites
 
-- The Mac must have SSH access to the server
+- A **local on-disk SSH key** must exist on the Mac (e.g. `~/.ssh/id_ed25519`). The tunnel must **not** use the Bitwarden agent key — see [Securing the Tunnel Key](#securing-the-tunnel-key) for why and how it is locked down
 - Ollama must be running on the Mac (port 11434)
 - The **"Expose Ollama to the network"** option must be enabled in Ollama's settings. Without this option, Ollama rejects requests coming through the tunnel with a 403 error.
 
@@ -133,7 +133,7 @@ Exposes the Ollama instance running on a Mac (Apple Silicon) to the server's Ope
 
 Add to the sshd config (e.g. `/etc/ssh/sshd_config`):
 
-```
+```conf
 GatewayPorts clientspecified
 ClientAliveInterval 30
 ClientAliveCountMax 3
@@ -163,6 +163,8 @@ Create `~/Library/LaunchAgents/com.ollama-tunnel.plist`:
         <string>ServerAliveInterval=30</string>
         <string>-o</string>
         <string>ServerAliveCountMax=3</string>
+        <string>-o</string>
+        <string>IdentityAgent=none</string> <!-- bypass Bitwarden agent, use the local key — see "Securing the Tunnel Key" -->
         <string>-R</string>
         <string>DOCKER_GATEWAY_IP:11434:localhost:11434</string>
         <string>DOMAIN</string>
@@ -190,7 +192,21 @@ Replace `DOCKER_GATEWAY_IP` and `DOMAIN` with values from `.env`, then load the 
 launchctl load ~/Library/LaunchAgents/com.ollama-tunnel.plist
 ```
 
-`RunAtLoad: true` starts the tunnel immediately and `KeepAlive: true` restarts it automatically if it dies. The native `ssh` binary is sufficient: resilience is handled by launchd, no need for `autossh`.
+### Securing the Tunnel Key
+
+The tunnel runs unattended via launchd, so its key can't go through Bitwarden — the agent would prompt for confirmation on every boot / reconnection. Rather than guarding _access_ to the key, we use the machine's local on-disk key and strip it, server-side, of every capability except the one port forward. `IdentityAgent=none` (set in the [plist above](#auto-start-at-login)) tells `ssh` to bypass the Bitwarden agent and fall back to that local key.
+
+On the server, prefix this key in `~/.ssh/authorized_keys` so it can do nothing but open the forward it needs:
+
+```text
+command="echo 'tunnel only'",restrict,permitlisten="DOCKER_GATEWAY_IP:11434" ssh-ed25519 AAAA...key... user@mac
+```
+
+- `restrict`: disables everything by default (PTY, agent/X11 forwarding, all port forwarding).
+- `command="echo 'tunnel only'"`: forces this fixed command, so the key can never run a shell or any other command. Without it, `restrict` still allows non-interactive execution (`ssh server 'any command'`) — i.e. the key could do almost anything. With `-N` the tunnel opens no command channel, so this never runs in normal use; it only fires if the key is misused.
+- `permitlisten="DOCKER_GATEWAY_IP:11434"`: re-enables only the single remote forward (`-R`) the tunnel uses (replace with the real gateway IP, e.g. `172.50.0.1:11434`).
+
+Even if the key leaks or the Mac session is left unlocked, it grants nothing but this one forward.
 
 ### Updating or Disabling the Tunnel
 
