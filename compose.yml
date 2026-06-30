@@ -233,6 +233,27 @@ services:
       mosquitto:
         condition: service_healthy
 
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+    labels:
+      traefik.enable: true
+      traefik.http.routers.grafana.middlewares: errp-redirect@file
+      traefik.http.services.grafana.loadbalancer.server.port: 3000
+
+  loki:
+    image: grafana/loki
+    volumes:
+      - loki_data:/loki
+      - ./loki/config.yaml:/etc/loki/local-config.yaml:ro
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./traefik/logs/:/var/log:ro
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+
   cs:
     image: crowdsecurity/crowdsec:latest-debian
     security_opt:
@@ -277,6 +298,8 @@ volumes:
   portainer_data:
   z2m_data:
   traefik_certs:
+  loki_data:
+  grafana_data:
   crowdsec_data:
   ollama_datas:
   open_webui_datas:
