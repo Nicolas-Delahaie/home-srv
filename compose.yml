@@ -176,6 +176,16 @@ services:
       traefik.http.routers.errp.priority: 10
       traefik.http.services.errp.loadbalancer.server.port: 8080
 
+  simcom:
+    build: ./simcom
+    volumes:
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - ./simcom/src:/app
+    devices:
+      - /dev/serial/by-id/${SIMCOM_DONGLE}:/dev/ttyUSB1
+    depends_on:
+      - mosquitto
+
   frigate:
     image: ghcr.io/blakeblackshear/frigate:0.17.2
     stop_grace_period: 30s # Frigate is long to quit
