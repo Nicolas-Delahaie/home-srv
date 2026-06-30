@@ -19,7 +19,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
    docker compose up -d --build
    ```
 
-   > This command starts the minimum set of containers required for the project to run. To enable additional services, add the corresponding profile to the command. For example, to enable the `stream` profile, add `--profile stream`.
+   > This command starts the minimum set of containers required for the project to run.
 
 3. CrowdSec:
    1. IP blocking at host level (CrowdSec Firewall Bouncer):
@@ -135,27 +135,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops.
 
-7. (Optional) Streaming service configuration (`movies` profile)
-
-   > These services must be configured via their web interface (not configurable via Docker environment variables)
-   1. QBittorrent:
-      1. Log in using the temporary admin password found in the logs:
-
-         ```bash
-         docker compose logs qbt
-         ```
-
-      2. Change the user: Tools > Options > WebUI > Authentication
-
-   2. Radarr:
-      1. Access the initial configuration popup
-      2. Set `Authentication Required` to `Enabled`
-      3. Define the main user
-      4. Configure QBittorrent as the download client in Settings > Download Clients. Select qBittorrent and enter the host `qbt`, and the username and password defined above.
-
-   3. Prowlarr: configuration is open
-
-8. (Optional) Cloud streaming on detection (YouTube Live):
+7. (Optional) Cloud streaming on detection (YouTube Live):
    1. In YouTube Studio, create a new live stream (the "Go Live" tab), copy the generated stream key and set the stream to **Private**
    2. Copy the key into `.env`: `YOUTUBE_STREAM_KEY=xxxx-xxxx-xxxx`
    3. `docker compose restart ha`

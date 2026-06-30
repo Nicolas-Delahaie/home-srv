@@ -283,63 +283,6 @@ services:
       authelia: # Necessary for authelia.log to be created
         condition: service_healthy
 
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./streaming/movies:/movies
-      - ./streaming/downloads:/downloads
-      - radarr_data:/config
-    labels:
-      traefik.enable: true
-      traefik.http.routers.radarr.middlewares: errp-redirect@file
-      traefik.http.services.radarr.loadbalancer.server.port: 7878
-    profiles:
-      - stream
-    depends_on:
-      - qbt
-      - prowlarr
-
-  qbt:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./streaming/downloads:/downloads
-      - qbt_config:/config
-    profiles:
-      - stream
-    labels:
-      traefik.enable: true
-      traefik.http.routers.qbt.middlewares: errp-redirect@file
-      traefik.http.services.qbt.loadbalancer.server.port: 8080
-
-  prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - prowlarr_config:/config
-    profiles:
-      - stream
-    labels:
-      traefik.enable: true
-      traefik.http.routers.prowlarr.middlewares: errp-redirect@file
-      traefik.http.services.prowlarr.loadbalancer.server.port: 9696
-
   ollama:
     image: ghcr.io/open-webui/open-webui:ollama
     security_opt:
@@ -368,9 +311,6 @@ volumes:
   loki_data:
   grafana_data:
   crowdsec_data:
-  radarr_data:
-  qbt_config:
-  prowlarr_config:
   ollama_datas:
   open_webui_datas:
 

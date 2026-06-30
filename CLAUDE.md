@@ -14,7 +14,6 @@ Covers home automation, video surveillance, password management, media streaming
 - **Security**: CrowdSec (threat detection, Traefik log analysis)
 - **Monitoring**: Glances
 - **Administration**: Portainer
-- **Media** (`stream` profile, optional): qBittorrent + Radarr + Prowlarr
 
 ## Project Structure
 
@@ -35,12 +34,11 @@ glances/                       # System monitoring config
 grdf/                          # Gas meter readings (Gazpar)
 home-srv.service               # systemd service to auto-start Docker Compose on boot
 docs/                          # Documentation (setup, access, network, drawio)
-streaming/                     # Downloads and media library
 ```
 
 ## Naming Conventions
 
-- **Services in compose**: short names (`traefik`, `authelia`, `ha`, `z2m`, `mosquitto`, `vw`, `cs`, `qbt`, `radarr`, `prowlarr`)
+- **Services in compose**: short names — use `docker compose config --services` to list them
 - **Cameras**: named by model (`tapo-c200`), not by number. Env vars: `CAM1_USER`, `CAM1_PASSWORD`, `CAM1_IP`
 - **Video streams**: `tapo_c200` (high quality), `tapo_c200_sub` (low quality) in go2rtc
 - **Configs**: `./service/config/` for configuration, `./service/data/` or volumes for data
@@ -58,9 +56,6 @@ streaming/                     # Downloads and media library
 ```bash
 # Standard startup
 docker compose up -d --build
-
-# With streaming profile (media)
-docker compose --profile stream up -d
 
 # Service logs
 docker compose logs -f <service>
