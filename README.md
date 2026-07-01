@@ -125,7 +125,17 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    > When the laptop is connected and reachable on the local network, Open WebUI can access it and run much more powerful models than the server allows. When the machine is off or absent from the network, only the server's local models remain available.
 
-6. (Optional) To enable automatic service startup when the server boots, create this `systemctl` auto-start service:
+6. Hermes (AI agent dashboard):
+
+   The agent configuration is versioned (`hermes/config.yaml`, mounted read-only), but the Nous Portal credentials live in the `hermes_data` volume and must be initialized once:
+
+   ```bash
+   docker compose run --rm hermes auth add nous --type oauth
+   ```
+
+   Follow the printed OAuth flow to log in with your Nous account. The dashboard is then available at `https://hermes.<DOMAIN>`, behind Authelia (SSO) plus Hermes' own basic auth (credentials from `.env`).
+
+7. (Optional) To enable automatic service startup when the server boots, create this `systemctl` auto-start service:
 
    ```bash
    sudo cp home-srv.service /etc/systemd/system/
@@ -135,7 +145,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops.
 
-7. (Optional) Cloud streaming on detection (YouTube Live):
+8. (Optional) Cloud streaming on detection (YouTube Live):
    1. In YouTube Studio, create a new live stream (the "Go Live" tab), copy the generated stream key and set the stream to **Private**
    2. Copy the key into `.env`: `YOUTUBE_STREAM_KEY=xxxx-xxxx-xxxx`
    3. `docker compose restart ha`

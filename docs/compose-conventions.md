@@ -19,7 +19,7 @@ Traefik handles all ingress on 443. Publish a port only for a consumer outside D
 ## Hardening
 
 - **`security_opt: no-new-privileges:true`** by default (omit for host networking).
-- **`restart`: never set it.** A crashed container must stay down so the problem is diagnosed, not looped. Boot recovery is handled by the `home-srv.service` systemd unit (README §6).
+- **`restart`: never set it.** A crashed container must stay down so the problem is diagnosed, not looped. Boot recovery is handled by the `home-srv.service` systemd unit (README §7).
 - **`privileged` / `cap_add` / `devices`**: only when strictly required, with an inline comment. Reference `devices` via stable `/dev/serial/by-id/...` paths, never `/dev/ttyUSBx` (`z2m`).
 
 ## Images
@@ -37,7 +37,7 @@ Track the upstream rolling tag (`:latest`, or a channel like `frigate:stable`) a
 
 - Prefer a versioned, bind-mounted config file (`./service/config/...:ro`) over manual UI/runtime setup, so the setup is reproducible from a fresh pull. If the image needs custom startup logic, add a bind-mounted entrypoint script (`:ro`), as `mosquitto` and `traefik` do — never an inline shell one-liner.
 - **Anything that cannot be pre-configured in Docker must be documented in the README.** When a service needs a manual or runtime step that no compose field, env var, or config file can capture (UI-only settings, a one-shot init, an interactive wizard), the README is the single mandatory place to explain it — leave nothing implicit.
-- When a tool generates its own state (config + secrets + data) in a single directory, do **not** version a hand-written config that fights its generator. Use a **named volume** and document the one-shot init command in the README (`hermes`: `hermes_data:/opt/data` → `docker compose run --rm hermes setup`). Where the tool supports it, override the generated config via `environment` rather than editing files inside the volume.
+- When a tool generates its own state (config + secrets + data) in a single directory, do **not** version a hand-written config that fights its generator. Use a **named volume** and document the one-shot init command in the README (`hermes`: `hermes_data:/opt/data` → `docker compose run --rm hermes auth add nous --type oauth`). Where the tool supports it, override the generated config via `environment` rather than editing files inside the volume.
 - **Volumes**: `:ro` when read-only; **named volume** for opaque runtime state, **bind mount** for files versioned in git or edited manually. Name named volumes `<service>_data`.
 
 ## CrowdSec

@@ -33,11 +33,6 @@ platform_toolsets:
     - todo
     - vision
     - web
-known_plugin_toolsets:
-  cli:
-    - spotify
-  telegram:
-    - spotify
 
 # ── Security ──────────────────────────────────────────────────────────
 # Secret redaction is ON by default — strings that look like API keys,
