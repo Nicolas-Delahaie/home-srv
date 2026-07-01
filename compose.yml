@@ -252,6 +252,26 @@ services:
       authelia: # Necessary for authelia.log to be created
         condition: service_healthy
 
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      traefik.enable: true
+      # Double auth (Authelia + Hermes basic auth) — mandatory, see commit.
+      traefik.http.routers.hermes.middlewares: authelia@file,errp-redirect@file
+      traefik.http.services.hermes.loadbalancer.server.port: 9119
+    environment:
+      - HERMES_DASHBOARD=1
+      - HERMES_DASHBOARD_HOST=0.0.0.0
+      - HERMES_DASHBOARD_BASIC_AUTH_USERNAME
+      - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD
+      - HERMES_DASHBOARD_BASIC_AUTH_SECRET
+    command: gateway run
+    volumes:
+      - hermes_data:/opt/data
+      - ./hermes/config.yaml:/opt/data/config.yaml:ro
+
   ollama:
     image: ghcr.io/open-webui/open-webui:ollama
     security_opt:
@@ -278,6 +298,7 @@ volumes:
   z2m_data:
   traefik_certs:
   crowdsec_data:
+  hermes_data:
   ollama_datas:
   open_webui_datas:
 
