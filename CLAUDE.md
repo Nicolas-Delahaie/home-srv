@@ -3,6 +3,11 @@
 Home server based on Docker Compose. Hosted on a Shuttle running Debian.
 Covers home automation, video surveillance, password management, media streaming and network security.
 
+## Principles
+
+- **Infrastructure as Code / zero-config**: the whole stack is reproducible and plug-and-play from a fresh clone — config is versioned, secrets live in `.env` (never hardcoded in YAML).
+- **Fail loudly**: a crashed service stays down to be diagnosed — no auto-`restart` (boot recovery is handled by `home-srv.service`).
+
 ## Tech Stack
 
 - **Orchestration**: Docker Compose (single `compose.yml` file)
@@ -77,14 +82,14 @@ docker compose restart <service>
 
 Consult these files based on the task context:
 
-| When                                | File                            |
-| ----------------------------------- | ------------------------------- |
+| When                                   | File                          |
+| -------------------------------------- | ----------------------------- |
 | Adding a service / compose conventions | `docs/compose-conventions.md` |
-| Server / host network configuration | `docs/server-setup.md`          |
-| SSH access                          | `docs/remote-access.md`         |
-| Local network / APIPA               | `docs/offline-network.md`       |
-| Router / DNS configuration          | `docs/router-setup.md`          |
-| Local DNS (dnsmasq)                 | `docs/dnsmasq.md`               |
+| Server / host network configuration    | `docs/server-setup.md`        |
+| SSH access                             | `docs/remote-access.md`       |
+| Local network / APIPA                  | `docs/offline-network.md`     |
+| Router / DNS configuration             | `docs/router-setup.md`        |
+| Local DNS (dnsmasq)                    | `docs/dnsmasq.md`             |
 
 Service subdirectories also contain `CLAUDE.md` files with service-specific rules:
 
