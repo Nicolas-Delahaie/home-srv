@@ -1,0 +1,24 @@
+name: Deploy
+
+# Deploys only when a Renovate PR is merged into main — manual pushes/merges never trigger it.
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true && github.event.pull_request.user.login == 'renovate[bot]'
+    runs-on: [self-hosted, home-srv-runner]
+    steps:
+      # No checkout — the real clone is already bind-mounted at $LOCAL_PATH.
+      - name: Pull and redeploy
+        run: |
+          cd "$LOCAL_PATH"
+          git pull --ff-only
+          docker compose up -d --build
+          docker image prune -f

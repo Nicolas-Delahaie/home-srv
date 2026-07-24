@@ -100,11 +100,11 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    Available models are listed on [ollama.com/library](https://ollama.com/library). Some examples:
 
-   | Model         | Size    | Description                                  |
-   | ------------- | ------- | -------------------------------------------- |
-   | `mistral`     | ~4 GB   | Good performance / size balance              |
-   | `llama3.2`    | ~2 GB   | Lighter, suitable for modest hardware        |
-   | `llama3.2:1b` | ~1.3 GB | Very lightweight                             |
+   | Model         | Size    | Description                           |
+   | ------------- | ------- | ------------------------------------- |
+   | `mistral`     | ~4 GB   | Good performance / size balance       |
+   | `llama3.2`    | ~2 GB   | Lighter, suitable for modest hardware |
+   | `llama3.2:1b` | ~1.3 GB | Very lightweight                      |
 
    > Models are persisted in the `ollama_datas` Docker volume. They survive container restarts and updates.
 
@@ -143,7 +143,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
    sudo systemctl enable home-srv
    ```
 
-   > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops.
+   > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops. `--profile ci` also starts the CI runner (see below).
 
 8. (Optional) Cloud streaming on detection (YouTube Live):
    1. In YouTube Studio, create a new live stream (the "Go Live" tab), copy the generated stream key and set the stream to **Private**
@@ -151,6 +151,14 @@ Setup guide for a home server and various configurations. Although based on a Sh
    3. `docker compose restart ha`
 
    > YouTube may display a warning "bitrate below recommended" — this is normal on static scenes (H264 compresses very efficiently). The bitrate rises automatically when there is movement.
+
+9. (Optional) Self-hosted CI: create a fine-grained PAT (**Contents** + **Pull requests: Read and write**) → repository secret `RENOVATE_TOKEN` (_Settings → Secrets and variables → Actions_).
+
+## Continuous Integration
+
+The self-hosted CI runner (`--profile ci`, started automatically by `home-srv.service` — see step 7) handles Renovate update PRs and automatic deploy.
+
+To review a Renovate PR with AI, add the `ai-review` label to it — `ai-review.yml` only runs when that label is present, to avoid burning AI quota on every push.
 
 ## Firewall and Network
 

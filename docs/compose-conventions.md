@@ -24,7 +24,7 @@ Traefik handles all ingress on 443. Publish a port only for a consumer outside D
 
 ## Images
 
-Track the upstream rolling tag (`:latest`, or a channel like `frigate:stable`) and star the repo to follow breaking changes. Pin a version only to hold back a known-bad release.
+**Always pin an explicit version** — never `:latest` or a channel tag like `frigate:stable`.
 
 ## Environment & secrets
 

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Paris",
+  "schedule": ["before 6am on wednesday", "before 6am on sunday"],
+  "dependencyDashboard": true,
+  "packageRules": [
+    { "matchUpdateTypes": ["patch"], "labels": ["patch"] },
+    { "matchUpdateTypes": ["minor"], "labels": ["minor"] },
+    { "matchUpdateTypes": ["major"], "labels": ["major"] }
+  ],
+  "customManagers": []
+}

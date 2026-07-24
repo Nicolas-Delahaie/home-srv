@@ -1,0 +1,60 @@
+name: AI changelog review
+
+# Queued on Renovate PRs only when manually labeled with 'ai-review' to avoid unnecessary AI quota consumption.
+# Runs on ubuntu-latest — no server access needed.
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+  models: read
+
+jobs:
+  review:
+    if: |
+      github.actor == 'renovate[bot]' &&
+      contains(github.event.pull_request.labels.*.name, 'ai-review')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Gather PR context
+        id: context
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          {
+            echo "## PR title/body (upstream changelog)"
+            gh pr view "$PR_NUMBER" --json title,body -q '.title + "\n\n" + .body'
+            echo
+            echo "## Diff"
+            gh pr diff "$PR_NUMBER"
+            echo
+            echo "## compose.yml (how this repo uses the image)"
+            cat compose.yml
+          } > /tmp/pr-context.txt
+
+      - name: Run AI review
+        id: inference
+        uses: actions/ai-inference@v1
+        with:
+          system-prompt: >
+            You are reviewing a Renovate dependency bump for a self-hosted Docker Compose home server.
+            You are given the PR title/body (with the upstream changelog), the diff (usually just a changed
+            image tag) and the current compose.yml. Compare the changelog to how this repo actually uses the
+            image (service definition, env vars, volumes, labels) and flag concrete risks: breaking config
+            changes, removed/renamed env vars, changed defaults, deprecated features in use here. Be concise.
+            If nothing looks risky, say so plainly instead of inventing concerns.
+          prompt-file: /tmp/pr-context.txt
+
+      - name: Post review as PR comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REVIEW: ${{ steps.inference.outputs.response }}
+        run: gh pr comment "$PR_NUMBER" --body "$REVIEW"

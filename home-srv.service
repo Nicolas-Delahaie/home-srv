@@ -6,7 +6,7 @@ After=docker.service
 Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=<REPO_PATH>
-ExecStart=docker compose up -d --build
+ExecStart=docker compose --profile ci up -d --build
 
 [Install]
 WantedBy=multi-user.target
