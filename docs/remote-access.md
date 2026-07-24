@@ -93,11 +93,16 @@ The key lives on disk. Always protect it with a passphrase — without one, the 
 
 ## Simplified Connection
 
-To avoid specifying the user on every connection, add to `~/.ssh/config`:
+To avoid specifying the user (and, for external access, the custom port) on every connection, add to `~/.ssh/config`:
 
 ```conf
-Host <hostname> <hostname>.local <public-domain> 64.64.31.31
+Host <hostname> <hostname>.local
       User user_name
+
+# External access: port forwarded on the router (see router-setup.md#port-forwarding)
+Host <public-domain>
+      User user_name
+      Port <external_ssh_port>
 ```
 
 The connection then becomes possible via:
@@ -106,9 +111,9 @@ The connection then becomes possible via:
 ssh server.local
 ```
 
-## Port 22 Forwarding
+## SSH Port Forwarding
 
-Once SSH is configured, port 22 must be forwarded on the router. Follow the procedure [here](./router-setup.md#port-forwarding) and ensure firewall rules allow access to port 22.
+Once SSH is configured, forward a custom external port on the router to the server's internal port 22 (**not** 22 directly). Follow the procedure and see the reasoning [here](./router-setup.md#port-forwarding), and ensure firewall rules allow access to that port.
 
 ## Ollama Tunnel (Mac)
 

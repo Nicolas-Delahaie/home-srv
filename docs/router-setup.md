@@ -7,7 +7,6 @@ This configuration applies to the Freebox but can be adapted to other internet r
 A static IP address is required to route the server over the internet. This ensures the stability of the public IP address, which is essential for port forwarding and DNS configuration.
 
 1. Obtain a static IP:
-
    - Log in at <https://adsl.free.fr>
    - Go to "Ma Freebox"
    - Select "Demander une adresse IP fixe V4 "full-stack""
@@ -20,11 +19,13 @@ A static IP address is required to route the server over the internet. This ensu
 
 On the router's intranet (<http://mafreebox.freebox.fr> for Free), configure port forwarding for the following ports to the server's local IP:
 
-- 22 (SSH)
+- A custom high external port (e.g. `2XXXX`) → **22** (SSH)
 - 80 (HTTP)
 - 443 (HTTPS)
 
 This allows external access to the server via SSH or a web browser.
+
+> **Why not forward port 22 directly**: automated bots scan port 22 across the whole internet non-stop, and this generates the vast majority of CrowdSec alerts on the server (noise, not real threats). The SSH daemon itself keeps listening on port 22 (unchanged, including for local access) — only the router's external-facing port is different. Forwarding an arbitrary external port to internal port 22 removes the server from most of that mass scanning. This does not replace SSH hardening ([Server Hardening](./remote-access.md#server-hardening)), it only cuts the noise.
 
 > It is recommended to create a static DHCP lease for the server to ensure its local IP does not change and forwarding works correctly. The lease must be created from the router's interface. To renew the lease after setting it as static on the router side, run `sudo dhclient <network_interface>`.
 

@@ -25,7 +25,7 @@ db_config:
   db_path: /var/lib/crowdsec/data/crowdsec.db
   flush:
     max_items: 5000
-    max_age: 7d
+    max_age: 90d # kept long so repeat offenders keep escalating ban duration (see profiles.yaml GetDecisionsCount) instead of resetting after a week
   use_wal: true
 api:
   client:
