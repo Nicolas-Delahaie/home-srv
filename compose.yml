@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.7.8
+    image: traefik:v3.7.10
     security_opt:
       - no-new-privileges:true
     volumes:
