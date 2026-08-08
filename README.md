@@ -135,7 +135,13 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    Follow the printed OAuth flow to log in with your Nous account. The dashboard is then available at `https://hermes.<DOMAIN>`, behind Authelia (SSO) plus Hermes' own basic auth (credentials from `.env`).
 
-7. (Optional) To enable automatic service startup when the server boots, create this `systemctl` auto-start service:
+7. Immich (photo/video management):
+
+   On first visit to `https://immich.<DOMAIN>`, the setup wizard prompts for the administrator account (email + password) — this cannot be pre-seeded via config. Once created, install the [mobile app](https://immich.app/download) and log in with the same credentials to enable automatic backup.
+
+   > Both video transcoding (VAAPI) and machine learning (OpenVINO — facial recognition, smart search) use the server's Intel GPU, shared with Frigate. The initial backlog on first import can still take a while. The ML container's memory is capped by `IMMICH_ML_MEM` (`.env`) so an OOM kills it rather than another service; if the iGPU causes issues, fall back to the plain `immich-machine-learning` image tag (no `-openvino` suffix) and drop its `devices` entry.
+
+8. (Optional) To enable automatic service startup when the server boots, create this `systemctl` auto-start service:
 
    ```bash
    sudo cp home-srv.service /etc/systemd/system/
@@ -145,16 +151,16 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops.
 
-8. (Optional) Cloud streaming on detection (YouTube Live):
+9. (Optional) Cloud streaming on detection (YouTube Live):
    1. In YouTube Studio, create a new live stream (the "Go Live" tab), copy the generated stream key and set the stream to **Private**
    2. Copy the key into `.env`: `YOUTUBE_STREAM_KEY=xxxx-xxxx-xxxx`
    3. `docker compose restart ha`
 
    > YouTube may display a warning "bitrate below recommended" — this is normal on static scenes (H264 compresses very efficiently). The bitrate rises automatically when there is movement.
 
-9. (Optional) Self-hosted CI :
-   1. A [fine-grained PAT](https://github.com/settings/personal-access-tokens/new) scoped to this repo, distinct from the server's push token ([Git Repository Access](docs/remote-access.md#git-repository-access-github-pat)), with **Administration** (read/write) → `.env`'s `RUNNER_ACCESS_TOKEN` — without it the runner never registers.
-   2. A [GitHub App](https://github.com/settings/apps/new) for Renovate, installed on this repo only, with **Contents**, **Pull requests**, **Issues** and **Workflows** (all read/write): the App ID goes into repository variable `RENOVATE_APP_ID` (_Settings → Secrets and variables → Actions → Variables_) and the private key into repository secret `RENOVATE_APP_PRIVATE_KEY`.
+10. (Optional) Self-hosted CI :
+    1. A [fine-grained PAT](https://github.com/settings/personal-access-tokens/new) scoped to this repo, distinct from the server's push token ([Git Repository Access](docs/remote-access.md#git-repository-access-github-pat)), with **Administration** (read/write) → `.env`'s `RUNNER_ACCESS_TOKEN` — without it the runner never registers.
+    2. A [GitHub App](https://github.com/settings/apps/new) for Renovate, installed on this repo only, with **Contents**, **Pull requests**, **Issues** and **Workflows** (all read/write): the App ID goes into repository variable `RENOVATE_APP_ID` (_Settings → Secrets and variables → Actions → Variables_) and the private key into repository secret `RENOVATE_APP_PRIVATE_KEY`.
 
 ## Continuous Integration
 

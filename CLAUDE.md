@@ -16,6 +16,7 @@ Covers home automation, video surveillance, password management, media streaming
 - **Home automation**: Home Assistant + Zigbee2MQTT + Mosquitto (MQTT)
 - **Video surveillance**: Frigate (AI detection) + go2rtc (RTSP streaming)
 - **Passwords**: Vaultwarden
+- **Photo/video management**: Immich (server + machine learning + Postgres/pgvector + Valkey)
 - **Security**: CrowdSec (threat detection, Traefik log analysis)
 - **Monitoring**: Glances
 - **Administration**: Portainer
@@ -31,6 +32,7 @@ authelia/config/               # Authelia config + user database
 ha/config/                     # Home Assistant (configuration.yaml, automations, custom_components)
 frigate/config/                # Frigate (config.yaml, model_cache)
 frigate/media/                 # Recordings, clips, exports
+immich/media/                  # Photo/video library (uploads, thumbnails, encoded videos)
 z2m/data/                      # Zigbee2MQTT (config + devices)
 mosquitto/                     # MQTT broker config
 cs/config/                     # CrowdSec (parsers, scenarios, collections)

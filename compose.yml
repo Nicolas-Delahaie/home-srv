@@ -218,6 +218,63 @@ services:
       mosquitto:
         condition: service_healthy
 
+  immich:
+    image: ghcr.io/immich-app/immich-server:v3.1.0
+    security_opt:
+      - no-new-privileges:true
+    devices:
+      - /dev/dri:/dev/dri # VAAPI-accelerated video transcoding (shared with frigate)
+    volumes:
+      - ./immich/media:/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - DB_HOSTNAME=immichdb
+      - DB_USERNAME=immich
+      - DB_PASSWORD=${IMMICH_DB_PASSWORD}
+      - DB_DATABASE_NAME=immich
+      - REDIS_HOSTNAME=immichredis
+      - IMMICH_MACHINE_LEARNING_URL=http://immichml:3003
+    labels:
+      traefik.enable: true
+      # No authelia/errp-redirect: the mobile app hits the API directly and needs raw JSON errors (see vw)
+      traefik.http.routers.immich.middlewares: secure-headers@file
+      traefik.http.services.immich.loadbalancer.server.port: 2283
+    depends_on:
+      immichdb:
+        condition: service_healthy
+      immichredis:
+        condition: service_healthy
+
+  immichml:
+    image: ghcr.io/immich-app/immich-machine-learning:v3.1.0-openvino
+    security_opt:
+      - no-new-privileges:true
+    devices:
+      - /dev/dri:/dev/dri # OpenVINO inference on the Intel iGPU (shared with frigate)
+    volumes:
+      - immichml_cache:/cache
+    mem_limit: ${IMMICH_ML_MEM}
+
+  immichredis:
+    image: docker.io/valkey/valkey:9.1.1
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: redis-cli ping || exit 1
+
+  immichdb:
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    security_opt:
+      - no-new-privileges:true
+    shm_size: "128mb"
+    environment:
+      - POSTGRES_USER=immich
+      - POSTGRES_PASSWORD=${IMMICH_DB_PASSWORD}
+      - POSTGRES_DB=immich
+      - POSTGRES_INITDB_ARGS=--data-checksums
+    volumes:
+      - immichdb_data:/var/lib/postgresql/data
+
   grdf:
     image: ssenart/gazpar2mqtt:0.2.5
     security_opt:
@@ -316,6 +373,8 @@ volumes:
   hermes_data:
   ollama_datas:
   open_webui_datas:
+  immichdb_data:
+  immichml_cache:
 
 networks:
   default:
