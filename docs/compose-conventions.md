@@ -4,6 +4,13 @@
 
 Each rule points to an existing service you can copy.
 
+## Naming
+
+- **No kebab-case, ever** — Compose service names never contain a hyphen.
+- If the product name is already a single, reasonably short word, keep it as-is: `frigate`, `ollama`, `hermes`, `mosquitto`, `traefik`, `authelia`, `glances`, `portainer`, `immich`.
+- Otherwise, abbreviate — one letter (or letter+digit) per significant word, when it reads naturally: `ha` (Home Assistant), `vw` (Vaultwarden), `cs` (CrowdSec), `z2m` (Zigbee2MQTT), `errp` (error-pages).
+- If a natural acronym doesn't exist or would be ambiguous, concatenate the full words instead, with no separator: `gharunner` (GitHub Actions runner), `immichdb`, `immichml`, `immichredis`. Length matters less here than for the two rules above, especially for a service that isn't exposed through Traefik.
+
 ## Traefik & exposure
 
 - **`traefik.enable: true`** is required — `exposedByDefault: false`.
