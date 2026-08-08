@@ -293,7 +293,6 @@ services:
 
   gharunner:
     image: ghcr.io/myoung34/docker-github-actions-runner:2.336.0-debian-bookworm
-    profiles: ["ci"] # excluded from `docker compose up`, so deploy.yml never recreates itself mid-job
     security_opt:
       - no-new-privileges:true
     volumes:

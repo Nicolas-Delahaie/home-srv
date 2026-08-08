@@ -143,7 +143,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
    sudo systemctl enable home-srv
    ```
 
-   > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops. `--profile ci` also starts the CI runner (see below).
+   > With this service, containers will start automatically when the server boots — particularly useful after a power outage. `restart=unless-stopped` has been disabled to facilitate crash diagnosis and avoid restart loops.
 
 8. (Optional) Cloud streaming on detection (YouTube Live):
    1. In YouTube Studio, create a new live stream (the "Go Live" tab), copy the generated stream key and set the stream to **Private**
@@ -158,7 +158,7 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
 ## Continuous Integration
 
-The self-hosted CI runner (`--profile ci`, started automatically by `home-srv.service` — see step 7) handles Renovate update PRs and automatic deploy.
+The `gharunner` service is an ordinary service, started like any other. It handles Renovate update PRs and the automatic deploy — which redeploys every service except `gharunner` itself, since recreating it would kill the job mid-run.
 
 `deploy.yml` only runs when a Renovate PR is merged into `main`.
 
