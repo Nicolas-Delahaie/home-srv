@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true && github.event.pull_request.user.login == 'renovate[bot]'
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/')
     runs-on: [self-hosted, home-srv-runner]
     steps:
       # No checkout — the real clone is already bind-mounted at $LOCAL_PATH.

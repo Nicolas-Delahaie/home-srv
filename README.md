@@ -152,11 +152,15 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    > YouTube may display a warning "bitrate below recommended" — this is normal on static scenes (H264 compresses very efficiently). The bitrate rises automatically when there is movement.
 
-9. (Optional) Self-hosted CI: create a fine-grained PAT (**Contents** + **Pull requests: Read and write**) → repository secret `RENOVATE_TOKEN` (_Settings → Secrets and variables → Actions_).
+9. (Optional) Self-hosted CI — two [fine-grained PATs](https://github.com/settings/personal-access-tokens/new) scoped to this repo, both distinct from the server's push token ([Git Repository Access](docs/remote-access.md#git-repository-access-github-pat)):
+   1. **Administration** (read/write) → `.env`'s `RUNNER_ACCESS_TOKEN` — without it the runner never registers.
+   2. **Contents** + **Pull requests** (read/write) → repository secret `RENOVATE_TOKEN` (_Settings → Secrets and variables → Actions_).
 
 ## Continuous Integration
 
 The self-hosted CI runner (`--profile ci`, started automatically by `home-srv.service` — see step 7) handles Renovate update PRs and automatic deploy.
+
+`deploy.yml` only runs when a Renovate PR is merged into `main`.
 
 To review a Renovate PR with AI, add the `ai-review` label to it — `ai-review.yml` only runs when that label is present, to avoid burning AI quota on every push.
 

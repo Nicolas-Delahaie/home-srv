@@ -242,6 +242,7 @@ The server keeps this repository in sync with GitHub through a **fine-grained pe
 The credential is a _fine-grained_ PAT (prefix `github_pat_`), **not** a classic token (`ghp_`). A classic token would grant access to every repository the account can reach; a fine-grained one is restricted to a single repo. Create it on GitHub — [Settings → Developer settings → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new) — with:
 
 - **Repository access** → _Only select repositories_ → `home-srv`
-- **Permissions** → _Contents_ (read/write) — enough to pull and push, nothing more
+- **Permissions** → _Contents_ (read/write) — enough to pull and push
+- **Permissions** → _Workflows_ (read/write) — required to push changes under `.github/workflows/`; without it GitHub rejects the push
 
 Blast radius: if the server is compromised, an intruder who recovers the credential can touch **this repository and nothing else** — no other repo, no account-wide action, no organization access.

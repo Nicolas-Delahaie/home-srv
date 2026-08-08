@@ -14,7 +14,7 @@ permissions:
 jobs:
   review:
     if: |
-      github.actor == 'renovate[bot]' &&
+      startsWith(github.head_ref, 'renovate/') &&
       contains(github.event.pull_request.labels.*.name, 'ai-review')
     runs-on: ubuntu-latest
     steps:
@@ -27,15 +27,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+        # Sections are truncated: the weekly grouped PR bundles every image's changelog and would
+        # otherwise blow past the GitHub Models input limit.
         run: |
           {
-            echo "## PR title/body (upstream changelog)"
-            gh pr view "$PR_NUMBER" --json title,body -q '.title + "\n\n" + .body'
+            echo "## PR title/body (upstream changelogs)"
+            gh pr view "$PR_NUMBER" --json title,body -q '.title + "\n\n" + .body' | head -c 40000
             echo
             echo "## Diff"
-            gh pr diff "$PR_NUMBER"
+            gh pr diff "$PR_NUMBER" | head -c 10000
             echo
-            echo "## compose.yml (how this repo uses the image)"
+            echo "## compose.yml (how this repo uses the images)"
             cat compose.yml
           } > /tmp/pr-context.txt
 
@@ -51,6 +53,7 @@ jobs:
             changes, removed/renamed env vars, changed defaults, deprecated features in use here. Be concise.
             If nothing looks risky, say so plainly instead of inventing concerns.
           prompt-file: /tmp/pr-context.txt
+          max-tokens: 1500 # action default is 200 — far too short for a multi-image review
 
       - name: Post review as PR comment
         env:

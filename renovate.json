@@ -1,9 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "timezone": "Europe/Paris",
-  "schedule": ["before 6am on wednesday", "before 6am on sunday"],
-  "dependencyDashboard": true,
+  "dependencyDashboard": false,
+  "vulnerabilityAlerts": { "enabled": false },
+  "separateMajorMinor": false,
+  "groupName": "weekly image updates",
+  "github-actions": { "enabled": false },
   "packageRules": [
     { "matchUpdateTypes": ["patch"], "labels": ["patch"] },
     { "matchUpdateTypes": ["minor"], "labels": ["minor"] },
