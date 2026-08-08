@@ -144,7 +144,7 @@ services:
       - 8883:8883 # Local network access with authentication
 
   vw:
-    image: vaultwarden/server:1.36.0
+    image: vaultwarden/server:1.37.1
     security_opt:
       - no-new-privileges:true
     volumes:
