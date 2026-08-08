@@ -39,6 +39,14 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/open-webui/open-webui"],
       "fetchChangeLogs": "off"
+    },
+    {
+      "matchPackageNames": [
+        "ghcr.io/immich-app/immich-server",
+        "ghcr.io/immich-app/immich-machine-learning"
+      ],
+      "groupName": "immich",
+      "description": "Server and machine-learning share the same Immich release — must be bumped together. The ML image keeps its -openvino suffix (Intel iGPU backend); do not drop it."
     }
   ],
   "customManagers": []
