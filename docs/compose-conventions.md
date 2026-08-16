@@ -50,5 +50,7 @@ Renovate links the upstream repo and changelog by reading the `org.opencontainer
 OCI label on the image's `latest` tag. When adding a service, check the label is present
 (`docker buildx imagetools inspect <image> --raw | jq '.config.Labels'` or the registry's own UI).
 If it is missing, add a `packageRule` to `renovate.json` with an explicit `sourceUrl` and a
-`description` explaining why (see the existing `portainer`/`frigate`/`hermes-agent`/
+`description` explaining why (see the existing `portainer`/`frigate`/
 `docker-github-actions-runner` entries).
+
+Updates are grouped into a single weekly PR, and GitHub caps a PR body at ~60k characters. An image whose release notes are long or frequent enough to crowd out the other entries gets `"fetchChangeLogs": "off"` in its `packageRule` (see `open-webui`/`hermes-agent`).

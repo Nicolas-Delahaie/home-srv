@@ -23,10 +23,10 @@
       "sourceUrl": "https://github.com/blakeblackshear/frigate"
     },
     {
-      "description": "Upstream image exposes no org.opencontainers.image.source label",
+      "description": "Verbose release notes. No sourceUrl: changelog not fetched",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["nousresearch/hermes-agent"],
-      "sourceUrl": "https://github.com/NousResearch/hermes-agent"
+      "fetchChangeLogs": "off"
     },
     {
       "description": "Upstream image exposes no org.opencontainers.image.source label",
