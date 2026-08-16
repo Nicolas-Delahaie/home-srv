@@ -4,8 +4,8 @@
   "dependencyDashboard": false,
   "vulnerabilityAlerts": { "enabled": false },
   "separateMajorMinor": false,
-  "groupName": "weekly image updates",
-  "github-actions": { "enabled": false },
+  "groupName": "weekly updates",
+  "assignees": ["Nicolas-Delahaie"],
   "packageRules": [
     { "matchUpdateTypes": ["patch"], "labels": ["patch"] },
     { "matchUpdateTypes": ["minor"], "labels": ["minor"] },

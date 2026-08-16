@@ -1,6 +1,8 @@
 name: Renovate
 
 # Runs on ubuntu-latest, not the self-hosted runner: Renovate never needs server/Docker access.
+# Auth via the home-srv-renovate GitHub App (not a PAT): commits come out Verified and permissions
+# are scoped to the App rather than a personal account.
 on:
   schedule:
     - cron: "0 5 * * 0"
@@ -10,11 +12,25 @@ jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ vars.RENOVATE_APP_ID }}
+          private-key: ${{ secrets.RENOVATE_APP_PRIVATE_KEY }}
+
+      # The bot user ID is needed to build the gitAuthor email so commits come out Verified
+      - name: Get app bot user ID
+        id: bot-user
+        run: echo "id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - uses: actions/checkout@v7
 
       - uses: renovatebot/github-action@v46.2.1
         with:
           configurationFile: renovate.json
-          token: "${{ secrets.RENOVATE_TOKEN }}"
+          token: ${{ steps.app-token.outputs.token }}
         env:
-          RENOVATE_REPOSITORIES: "${{ github.repository }}"
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_GIT_AUTHOR: "${{ steps.app-token.outputs.app-slug }}[bot] <${{ steps.bot-user.outputs.id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>"

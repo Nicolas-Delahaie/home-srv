@@ -152,9 +152,9 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    > YouTube may display a warning "bitrate below recommended" — this is normal on static scenes (H264 compresses very efficiently). The bitrate rises automatically when there is movement.
 
-9. (Optional) Self-hosted CI — two [fine-grained PATs](https://github.com/settings/personal-access-tokens/new) scoped to this repo, both distinct from the server's push token ([Git Repository Access](docs/remote-access.md#git-repository-access-github-pat)):
-   1. **Administration** (read/write) → `.env`'s `RUNNER_ACCESS_TOKEN` — without it the runner never registers.
-   2. **Contents** + **Pull requests** (read/write) → repository secret `RENOVATE_TOKEN` (_Settings → Secrets and variables → Actions_).
+9. (Optional) Self-hosted CI :
+   1. A [fine-grained PAT](https://github.com/settings/personal-access-tokens/new) scoped to this repo, distinct from the server's push token ([Git Repository Access](docs/remote-access.md#git-repository-access-github-pat)), with **Administration** (read/write) → `.env`'s `RUNNER_ACCESS_TOKEN` — without it the runner never registers.
+   2. A [GitHub App](https://github.com/settings/apps/new) for Renovate, installed on this repo only, with **Contents**, **Pull requests**, **Issues** and **Workflows** (all read/write): the App ID goes into repository variable `RENOVATE_APP_ID` (_Settings → Secrets and variables → Actions → Variables_) and the private key into repository secret `RENOVATE_APP_PRIVATE_KEY`.
 
 ## Continuous Integration
 
@@ -162,7 +162,7 @@ The `gharunner` service is an ordinary service, started like any other. It handl
 
 `deploy.yml` only runs when a Renovate PR is merged into `main`.
 
-To review a Renovate PR with AI, add the `ai-review` label to it — `ai-review.yml` only runs when that label is present, to avoid burning AI quota on every push.
+To review a Renovate PR with AI, add the `ai-review` label to it — `ai-review.yml` only runs when that label is present, to avoid burning AI quota on every push. The analysis runs through Copilot CLI and consumes premium requests from the repository owner's Copilot plan, which is why it's opt-in per PR rather than automatic.
 
 ## Firewall and Network
 
