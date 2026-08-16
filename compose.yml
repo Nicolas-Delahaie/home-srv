@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.7.8
+    image: traefik:v3.7.10
     security_opt:
       - no-new-privileges:true
     volumes:
@@ -49,7 +49,7 @@ services:
       traefik.enable: true
 
   glances:
-    image: nicolargo/glances:4.5.5
+    image: nicolargo/glances:4.5.6
     volumes:
       - ./glances/glances.conf:/etc/glances/glances.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -79,7 +79,7 @@ services:
       - 127.0.0.1:9000:9000 # Necessary for HA, which is not on the same network
 
   ha:
-    image: ghcr.io/home-assistant/home-assistant:2026.7.4
+    image: ghcr.io/home-assistant/home-assistant:2026.8.2
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./ha/config:/config
@@ -103,7 +103,7 @@ services:
         condition: service_healthy
 
   z2m:
-    image: koenkk/zigbee2mqtt:2.12.1
+    image: koenkk/zigbee2mqtt:2.13.0
     security_opt:
       - no-new-privileges:true
     volumes:
@@ -253,7 +253,7 @@ services:
         condition: service_healthy
 
   hermes:
-    image: nousresearch/hermes-agent:v2026.7.20
+    image: nousresearch/hermes-agent:v2026.8.13
     security_opt:
       - no-new-privileges:true
     labels:
@@ -272,7 +272,7 @@ services:
       - ./hermes/config.yaml:/opt/data/config.yaml:ro
 
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.10.2-ollama
+    image: ghcr.io/open-webui/open-webui:v0.11.0-ollama
     security_opt:
       - no-new-privileges:true
     labels:
