@@ -64,7 +64,7 @@ services:
     pid: host
 
   portainer:
-    image: portainer/portainer-ce:2.39.5
+    image: portainer/portainer-ce:2.44.0
     security_opt:
       - no-new-privileges:true
     volumes:
