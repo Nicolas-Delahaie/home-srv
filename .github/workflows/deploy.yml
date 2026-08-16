@@ -19,7 +19,8 @@ jobs:
       - name: Pull and redeploy
         run: |
           cd "$LOCAL_PATH"
-          git pull --ff-only
+          # safe.directory: the repo is owned by the host user, not the runner's
+          git -c safe.directory="$LOCAL_PATH" pull --ff-only
           # Every service but gharunner: redeploying it would destroy the container running this job.
           docker compose config --services | grep -v '^gharunner$' | xargs -r docker compose up -d --build
           docker image prune -f
