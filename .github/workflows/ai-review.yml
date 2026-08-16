@@ -55,7 +55,7 @@ jobs:
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          model: claude-sonnet-4.5
+          model: "" # empty = Copilot CLI picks its own default model
           system-prompt: >
             You are reviewing a Renovate dependency bump for a self-hosted Docker Compose home server.
             You are given the PR title/body (with the upstream changelog), the diff (usually just a changed
