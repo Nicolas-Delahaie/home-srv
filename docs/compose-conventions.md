@@ -43,3 +43,12 @@ Traefik handles all ingress on 443. Publish a port only for a consumer outside D
 ## CrowdSec
 
 When the service produces logs reachable by CrowdSec (especially anything Traefik proxies to the internet), wire a collection/parser in `cs/`.
+
+## Renovate
+
+Renovate links the upstream repo and changelog by reading the `org.opencontainers.image.source`
+OCI label on the image's `latest` tag. When adding a service, check the label is present
+(`docker buildx imagetools inspect <image> --raw | jq '.config.Labels'` or the registry's own UI).
+If it is missing, add a `packageRule` to `renovate.json` with an explicit `sourceUrl` and a
+`description` explaining why (see the existing `portainer`/`frigate`/`hermes-agent`/
+`docker-github-actions-runner` entries).
