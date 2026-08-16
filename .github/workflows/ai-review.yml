@@ -18,7 +18,7 @@ jobs:
       contains(github.event.pull_request.labels.*.name, 'ai-review')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -41,7 +41,7 @@ jobs:
             cat compose.yml
           } > /tmp/pr-context.txt
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           # Copilot CLI requires Node >= 22
           node-version: 24
