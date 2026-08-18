@@ -328,25 +328,26 @@ services:
       - hermes_data:/opt/data
       - ./hermes/config.yaml:/opt/data/config.yaml:ro
 
-  ollama:
+  openwu:
     image: ghcr.io/open-webui/open-webui:v0.11.0-ollama
     security_opt:
       - no-new-privileges:true
     labels:
       traefik.enable: true
-      traefik.http.routers.ollama.middlewares: errp-redirect@file
-      traefik.http.services.ollama.loadbalancer.server.port: 8080
+      traefik.http.routers.openwu.middlewares: errp-redirect@file
+      traefik.http.services.openwu.loadbalancer.server.port: 8080
     environment:
       - WEBUI_AUTH=true
-      - WEBUI_URL=https://ollama.${DOMAIN}
+      - WEBUI_URL=https://openwu.${DOMAIN}
       - OLLAMA_BASE_URLS=http://localhost:11434;http://${DOCKER_GATEWAY_IP}:11434
+      # Config file first: runtime UI changes are not persisted on restart, ensuring reproducibility
       - ENABLE_PERSISTENT_CONFIG=false
       - ENABLE_SIGNUP=false
     volumes:
       - ollama_datas:/root/.ollama
       - open_webui_datas:/app/backend/data
-    cpus: ${OLLAMA_CPUS}
-    mem_limit: ${OLLAMA_MEM}
+    cpus: ${OPENWU_CPUS}
+    mem_limit: ${OPENWU_MEM}
 
   gharunner:
     image: ghcr.io/myoung34/docker-github-actions-runner:2.336.0-debian-bookworm

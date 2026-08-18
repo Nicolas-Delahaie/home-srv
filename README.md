@@ -90,21 +90,19 @@ Setup guide for a home server and various configurations. Although based on a Sh
       docker run --rm -it authelia/authelia:latest authelia crypto hash generate argon2
       ```
 
-5. Ollama (Open WebUI):
+5. Open WebUI (`openwu`):
 
-   On first launch, no models are installed. At least one must be downloaded to start chatting:
+   Ollama is bundled in its image and is only a fallback backend (see [`openwu/README.md`](./openwu/README.md) for the model and preset configuration).
+
+   **This deployment keeps the bundled Ollama empty on purpose**: the Shuttle has no GPU, so inference happens on an external machine reached through the SSH tunnel ([`docs/remote-access.md`](./docs/remote-access.md)). Nothing needs to be pulled here.
+
+   Should you want a local fallback anyway — a small model that answers when the tunnel is down — pull it into the container:
 
    ```bash
-   docker compose exec ollama ollama pull mistral
+   docker compose exec openwu ollama pull mistral
    ```
 
    Available models are listed on [ollama.com/library](https://ollama.com/library). Some examples:
-
-   | Model         | Size    | Description                           |
-   | ------------- | ------- | ------------------------------------- |
-   | `mistral`     | ~4 GB   | Good performance / size balance       |
-   | `llama3.2`    | ~2 GB   | Lighter, suitable for modest hardware |
-   | `llama3.2:1b` | ~1.3 GB | Very lightweight                      |
 
    > Models are persisted in the `ollama_datas` Docker volume. They survive container restarts and updates.
 
