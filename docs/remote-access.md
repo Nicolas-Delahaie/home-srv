@@ -145,7 +145,7 @@ ClientAliveCountMax 3
 ```
 
 - `GatewayPorts clientspecified`: allows the tunnel to bind on the Docker gateway IP (`DOCKER_GATEWAY_IP`), required for containers to access the tunnel
-- `ClientAliveInterval/CountMax`: detects dead SSH clients in ~90s and releases the tunnel port. Without this, a sudden Mac disconnection (Wi-Fi drop, sleep) leaves a zombie session that blocks the port
+- `ClientAliveInterval/CountMax`: detects dead SSH clients in ~90s and releases the tunnel port. Without this, a sudden Mac disconnection (Wi-Fi drop, shutdown) leaves a zombie session that blocks the port. Sleep is not such a case: macOS answers the keepalives while asleep, so the session survives
 
 Then restart sshd: `sudo systemctl restart sshd`
 
@@ -162,6 +162,8 @@ Create `~/Library/LaunchAgents/com.ollama-tunnel.plist`:
     <string>com.ollama-tunnel</string>
     <key>ProgramArguments</key>
     <array>
+        <string>/usr/bin/caffeinate</string>
+        <string>-s</string>
         <string>/usr/bin/ssh</string>
         <string>-N</string>
         <string>-o</string>
@@ -186,6 +188,7 @@ Create `~/Library/LaunchAgents/com.ollama-tunnel.plist`:
 </plist>
 ```
 
+- `caffeinate -s`: keeps the Mac awake for as long as the tunnel runs, **on AC power only** — on battery the assertion is inert and it sleeps normally. Costs ~2.5 W
 - `-N`: no remote shell, tunnel only
 - `ServerAliveInterval/CountMax`: detects a dead connection in ~90s on the client side
 - The tunnel binds on the Docker gateway IP to be accessible from containers
@@ -227,7 +230,15 @@ launchctl load ~/Library/LaunchAgents/com.ollama-tunnel.plist
 
 ### Verification
 
-On the Mac: `launchctl list | grep ollama` should show a PID (1st column).
+`launchctl load` is silent on failure — a malformed plist simply never runs. Check all three:
+
+```bash
+plutil -lint ~/Library/LaunchAgents/com.ollama-tunnel.plist  # XML valid?
+launchctl list | grep ollama                                 # col. 1 = PID, col. 2 = exit code
+pmset -g assertions | grep PreventSystemSleep                # 1 = caffeinate is holding
+```
+
+Errors land in `/tmp/ollama-tunnel.log`.
 
 On the server: `ss -tlnp | grep 11434` should show the port listening.
 
