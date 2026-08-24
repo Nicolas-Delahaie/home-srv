@@ -1,3 +1,10 @@
+---
+paths:
+  - "compose.yml"
+  - ".env.template"
+  - "renovate.json"
+---
+
 # Compose Conventions — Adding a New Service
 
 **This file documents only the choices specific to this repository** — the non-obvious conventions and the _why_ behind them. Generic Docker/Compose practices that any competent setup follows (declaring `depends_on`, adding a `healthcheck`, capping resources, mounting the timezone…) are intentionally left out: if it is logical and not specific to this stack, it does not belong here.
