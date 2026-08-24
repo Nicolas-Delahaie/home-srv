@@ -246,3 +246,16 @@ The credential is a _fine-grained_ PAT (prefix `github_pat_`), **not** a classic
 - **Permissions** → _Workflows_ (read/write) — required to push changes under `.github/workflows/`; without it GitHub rejects the push
 
 Blast radius: if the server is compromised, an intruder who recovers the credential can touch **this repository and nothing else** — no other repo, no account-wide action, no organization access.
+
+### Storage: Git credential helper
+
+The token is **never** embedded in the remote URL. A URL-embedded credential leaks into `git remote -v`, into `.git/config` — world-readable, and bind-mounted into the `gharunner` container, so any workflow job running on the self-hosted runner could read it — and into every backup of the repository directory.
+
+It lives in Git's credential helper instead, outside the repository:
+
+```bash
+git config --global credential.helper store
+git remote set-url origin https://github.com/Nicolas-Delahaie/home-srv.git
+```
+
+The next push prompts for the username and the token, then writes them to `~/.git-credentials` (mode `600`, in `$HOME`, outside the bind mount).
