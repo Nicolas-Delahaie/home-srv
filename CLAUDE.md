@@ -18,7 +18,7 @@ Covers home automation, video surveillance, password management, media streaming
 - **Passwords**: Vaultwarden
 - **Photo/video management**: Immich (server + machine learning + Postgres/pgvector + Valkey)
 - **Security**: CrowdSec (threat detection, Traefik log analysis)
-- **Monitoring**: Glances
+- **Monitoring**: Glances (host) + Gatus (uptime probes, config from an external project's clone)
 - **Administration**: Portainer
 
 ## Project Structure

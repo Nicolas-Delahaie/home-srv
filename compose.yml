@@ -63,6 +63,24 @@ services:
     network_mode: host
     pid: host
 
+  gatus:
+    image: twinproduction/gatus:v5.36.0
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      # Long syntax: a missing config aborts the mount instead of silently creating a directory
+      - type: bind
+        source: ${MONITORED_PROJECT_SUPERVISION}/config.yaml
+        target: /config/config.yaml
+        read_only: true
+      - gatus_data:/data
+      - /etc/localtime:/etc/localtime:ro
+    env_file: ${MONITORED_PROJECT_SUPERVISION}/.env
+    labels:
+      traefik.enable: true
+      traefik.http.routers.gatus.middlewares: authelia@file,errp-redirect@file
+      traefik.http.services.gatus.loadbalancer.server.port: 8080
+
   portainer:
     image: portainer/portainer-ce:2.44.0
     security_opt:
@@ -366,6 +384,7 @@ services:
       - LOCAL_PATH
 
 volumes:
+  gatus_data:
   vw_data:
   portainer_data:
   z2m_data:
