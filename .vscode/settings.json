@@ -5,5 +5,9 @@
   },
   "files.watcherExclude": {
     ".claude/worktrees/**": true
+  },
+  "files.associations": {
+    "**/ha/config/*.yaml": "home-assistant",
+    "**/ha/config/**/*.yaml": "home-assistant"
   }
 }
