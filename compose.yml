@@ -360,6 +360,9 @@ services:
       # Config file first: runtime UI changes are not persisted on restart, ensuring reproducibility
       - ENABLE_PERSISTENT_CONFIG=false
       - ENABLE_SIGNUP=false
+      - ENABLE_API_KEYS=true
+      # Not an app setting: openwu/apply.sh expands it here, via docker exec
+      - OPENWU_KEY
     volumes:
       - open_webui_datas:/app/backend/data
     cpus: ${OPENWU_CPUS}

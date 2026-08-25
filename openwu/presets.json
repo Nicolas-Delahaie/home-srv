@@ -1,0 +1,62 @@
+{
+  "models": [
+    {
+      "id": "coding-s",
+      "name": "Coding S",
+      "base_model_id": "qwen3.5:4b-mlx",
+      "params": {
+        "num_ctx": 131072,
+        "think": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "system": "Answer immediately and in as few words as the question allows. No preamble, no restatement of the question, no closing summary. Code first; prose only when it changes what the reader would do."
+      }
+    },
+    {
+      "id": "coding-m",
+      "name": "Coding M",
+      "base_model_id": "qwen3.5:9b-mlx",
+      "params": {
+        "num_ctx": 131072,
+        "temperature": 0.6,
+        "presence_penalty": 0.0,
+        "system": "You analyse code you did not write and report on it; another model writes the code. You are given large amounts of source at once. Ground every claim in what you were actually shown: name the file and quote the line rather than describing it from memory. When the context does not contain what you need, say which file is missing instead of inferring its contents. Lead with what matters, and separate what you observed from what you suspect."
+      }
+    },
+    {
+      "id": "coding-l",
+      "name": "Coding L",
+      "base_model_id": "oamazonasgabriel/qwen3.6-35b-a3b:q4-24gbGPU",
+      "params": {
+        "num_ctx": 65536
+      }
+    },
+    {
+      "id": "chat-fast",
+      "name": "Chat Fast",
+      "base_model_id": "gemma4:latest",
+      "params": {
+        "num_ctx": 32768,
+        "think": false,
+        "system": "Answer directly and briefly. No preamble."
+      }
+    },
+    {
+      "id": "chat-deep",
+      "name": "Chat Deep",
+      "base_model_id": "gemma4:26b-mlx",
+      "params": {
+        "num_ctx": 24576
+      }
+    },
+    {
+      "id": "chat-fr",
+      "name": "Chat FR",
+      "base_model_id": "ministral-3:14b",
+      "params": {
+        "num_ctx": 32768,
+        "system": "Réponds en français, dans une langue naturelle et précise. Évite les anglicismes quand un terme français courant existe."
+      }
+    }
+  ]
+}

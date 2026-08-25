@@ -94,6 +94,8 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
    Frontend only — the Shuttle has no GPU and runs no inference. `OLLAMA_BASE_URLS` points at `DOCKER_GATEWAY_IP:11434`, where a reverse SSH tunnel exposes the Ollama instance of an external machine: [`docs/remote-access.md`](./docs/remote-access.md#ollama-tunnel-mac).
 
+   Presets are declared in [`openwu/`](./openwu/README.md) and pushed with `openwu/apply.sh`, which authenticates with `OPENWU_KEY` (`.env`). Models themselves are pulled on the inference machine, not here.
+
    > Tunnel down = no model at all.
 
 6. Hermes (AI agent dashboard):
