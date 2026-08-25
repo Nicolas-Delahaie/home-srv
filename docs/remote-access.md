@@ -117,7 +117,7 @@ Once SSH is configured, forward a custom external port on the router to the serv
 
 ## Ollama Tunnel (Mac)
 
-Exposes the Ollama instance running on a Mac (Apple Silicon) to the server's Open WebUI via a reverse SSH tunnel. The Mac's models appear in Open WebUI alongside the server's local models.
+Exposes the Ollama instance running on a Mac (Apple Silicon) to the server's Open WebUI via a reverse SSH tunnel. Its models are the only ones Open WebUI serves — nothing is pulled on the Shuttle.
 
 ### Prerequisites
 
@@ -242,7 +242,7 @@ Errors land in `/tmp/ollama-tunnel.log`.
 
 On the server: `ss -tlnp | grep 11434` should show the port listening.
 
-From the Open WebUI interface, go to **Admin Panel → Settings → Connections**: both endpoints (`localhost:11434` and `${DOCKER_GATEWAY_IP}:11434`) should appear with a green status.
+From the Open WebUI interface, go to **Admin Panel → Settings → Connections**: the `${DOCKER_GATEWAY_IP}:11434` endpoint should appear with a green status.
 
 ## Git Repository Access (GitHub PAT)
 

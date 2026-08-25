@@ -347,7 +347,7 @@ services:
       - ./hermes/config.yaml:/opt/data/config.yaml:ro
 
   openwu:
-    image: ghcr.io/open-webui/open-webui:v0.11.0-ollama
+    image: ghcr.io/open-webui/open-webui:v0.11.0
     security_opt:
       - no-new-privileges:true
     labels:
@@ -356,12 +356,11 @@ services:
     environment:
       - WEBUI_AUTH=true
       - WEBUI_URL=https://openwu.${DOMAIN}
-      - OLLAMA_BASE_URLS=http://localhost:11434;http://${DOCKER_GATEWAY_IP}:11434
+      - OLLAMA_BASE_URLS=http://${DOCKER_GATEWAY_IP}:11434
       # Config file first: runtime UI changes are not persisted on restart, ensuring reproducibility
       - ENABLE_PERSISTENT_CONFIG=false
       - ENABLE_SIGNUP=false
     volumes:
-      - ollama_datas:/root/.ollama
       - open_webui_datas:/app/backend/data
     cpus: ${OPENWU_CPUS}
     mem_limit: ${OPENWU_MEM}
@@ -390,7 +389,6 @@ volumes:
   traefik_certs:
   crowdsec_data:
   hermes_data:
-  ollama_datas:
   open_webui_datas:
   immichdb_data:
   immichml_cache:

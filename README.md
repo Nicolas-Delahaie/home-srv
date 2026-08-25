@@ -92,36 +92,9 @@ Setup guide for a home server and various configurations. Although based on a Sh
 
 5. Open WebUI (`openwu`):
 
-   Ollama is bundled in its image and is only a fallback backend (see [`openwu/README.md`](./openwu/README.md) for the model and preset configuration).
+   Frontend only — the Shuttle has no GPU and runs no inference. `OLLAMA_BASE_URLS` points at `DOCKER_GATEWAY_IP:11434`, where a reverse SSH tunnel exposes the Ollama instance of an external machine: [`docs/remote-access.md`](./docs/remote-access.md#ollama-tunnel-mac).
 
-   **This deployment keeps the bundled Ollama empty on purpose**: the Shuttle has no GPU, so inference happens on an external machine reached through the SSH tunnel ([`docs/remote-access.md`](./docs/remote-access.md)). Nothing needs to be pulled here.
-
-   Should you want a local fallback anyway — a small model that answers when the tunnel is down — pull it into the container:
-
-   ```bash
-   docker compose exec openwu ollama pull mistral
-   ```
-
-   Available models are listed on [ollama.com/library](https://ollama.com/library). Some examples:
-
-   > Models are persisted in the `ollama_datas` Docker volume. They survive container restarts and updates.
-
-   **Using an external Ollama server (optional)**:
-
-   The embedded server (Shuttle) has limited processing power. If a more powerful device is available on the local network (e.g. a powerful laptop with Ollama installed), Open WebUI can connect to it to run more demanding models.
-
-   Prerequisites on the remote machine:
-   1. Install Ollama ([ollama.com](https://ollama.com))
-   2. Enable external access on Ollama. The simplest way is via the Ollama interface: **Settings** > **Networking** > enable **Allow external connections**. Alternatively, set the environment variable `OLLAMA_HOST=0.0.0.0` before launching Ollama.
-   3. Create a **static DHCP lease** on the router for this machine so its local IP does not change (mDNS does not work with Open WebUI, a fixed IP is required)
-
-   Configuration in Open WebUI:
-   1. Log into Open WebUI
-   2. Go to **Admin Panel** > **Settings** > **Connections**
-   3. In the **Ollama** section, add a new connection with the URL `http://<LAPTOP_FIXED_IP>:11434`
-   4. Verify the connection: models installed on the remote machine should appear in the list of available models
-
-   > When the laptop is connected and reachable on the local network, Open WebUI can access it and run much more powerful models than the server allows. When the machine is off or absent from the network, only the server's local models remain available.
+   > Tunnel down = no model at all.
 
 6. Hermes (AI agent dashboard):
 
