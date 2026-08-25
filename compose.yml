@@ -352,7 +352,6 @@ services:
       - no-new-privileges:true
     labels:
       traefik.enable: true
-      traefik.http.routers.openwu.middlewares: errp-redirect@file
       traefik.http.services.openwu.loadbalancer.server.port: 8080
     environment:
       - WEBUI_AUTH=true
