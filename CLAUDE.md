@@ -71,6 +71,17 @@ docker compose logs -f <service>
 docker compose restart <service>
 ```
 
+## Working Rules
+
+Govern every change to this repo: code, config, docs, commit messages. Not documentation alone.
+
+- **Minimise debt, in code and in docs.** No frozen value that expires: versions, states, hard-coded dates. One fact, one place → point at its living source, never copy it.
+- **No transient state in anything persistent.** "to watch", "in progress", "not done yet", a status, a ticket reference → a ticket or an automated check. Never an ADR, a comment or a doc.
+- **Minimal code, rare comments.** Least code that solves the problem. Code says how, the commit says why, a comment says only the exception: hidden constraint, workaround, surprising behaviour.
+- **Why lives in the commit, nowhere else.** Rationale, trade-off, discarded alternative, decision history → the commit that settled it. Every persistent artefact states the current rule alone.
+- **Telegraphic register.** Docs, comments, commit messages, tickets: short sentences, arrows, colons. No prose.
+- **No manual line breaks in prose.** Docs, commits, tickets, plans: no newline mid-sentence or mid-paragraph, editors wrap. Not code or its comments → wrapping there is deliberate.
+
 ## Contribution Rules
 
 - **Language**: all code (variables, functions, inline comments, config file names) must be in **English**. READMEs, documentation (`docs/`) and user-facing messages are also in **English**
