@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "ignorePresets": ["group:monorepos"],
   "dependencyDashboard": false,
   "vulnerabilityAlerts": { "enabled": false },
   "separateMajorMinor": false,
