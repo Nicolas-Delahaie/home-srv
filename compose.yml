@@ -347,7 +347,7 @@ services:
       - ./hermes/config.yaml:/opt/data/config.yaml:ro
 
   openwu:
-    image: ghcr.io/open-webui/open-webui:v0.13.0
+    image: ghcr.io/open-webui/open-webui:v0.13.1
     security_opt:
       - no-new-privileges:true
     labels:
