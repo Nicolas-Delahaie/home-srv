@@ -237,7 +237,7 @@ services:
         condition: service_healthy
 
   immich:
-    image: ghcr.io/immich-app/immich-server:v3.1.0
+    image: ghcr.io/immich-app/immich-server:v3.3.6
     security_opt:
       - no-new-privileges:true
     devices:
@@ -264,7 +264,7 @@ services:
         condition: service_healthy
 
   immichml:
-    image: ghcr.io/immich-app/immich-machine-learning:v3.1.0-openvino
+    image: ghcr.io/immich-app/immich-machine-learning:v3.3.6-openvino
     security_opt:
       - no-new-privileges:true
     devices:
