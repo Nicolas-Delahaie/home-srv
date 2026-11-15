@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.7.17
+    image: traefik:v3.7.19
     security_opt:
       - no-new-privileges:true
     volumes:
@@ -97,7 +97,7 @@ services:
       - 127.0.0.1:9000:9000 # Necessary for HA, which is not on the same network
 
   ha:
-    image: ghcr.io/home-assistant/home-assistant:2026.11.0
+    image: ghcr.io/home-assistant/home-assistant:2026.11.1
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./ha/config:/config
@@ -237,7 +237,7 @@ services:
         condition: service_healthy
 
   immich:
-    image: ghcr.io/immich-app/immich-server:v3.3.6
+    image: ghcr.io/immich-app/immich-server:v3.4.1
     security_opt:
       - no-new-privileges:true
     devices:
@@ -264,7 +264,7 @@ services:
         condition: service_healthy
 
   immichml:
-    image: ghcr.io/immich-app/immich-machine-learning:v3.3.6-openvino
+    image: ghcr.io/immich-app/immich-machine-learning:v3.4.1-openvino
     security_opt:
       - no-new-privileges:true
     devices:
@@ -294,7 +294,7 @@ services:
       - immichdb_data:/var/lib/postgresql/data
 
   grdf:
-    image: ssenart/gazpar2mqtt:0.2.5
+    image: ssenart/gazpar2mqtt:0.3.1
     security_opt:
       - no-new-privileges:true
     volumes:
@@ -347,7 +347,7 @@ services:
       - ./hermes/config.yaml:/opt/data/config.yaml:ro
 
   openwu:
-    image: ghcr.io/open-webui/open-webui:v0.13.0
+    image: ghcr.io/open-webui/open-webui:v0.13.3
     security_opt:
       - no-new-privileges:true
     labels:
