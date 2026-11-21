@@ -22,8 +22,7 @@
       "Bash(ssh *)",
       "Bash(bash -c *)",
       "Bash(sh -c *)",
-      "Read(./.env)",
-      "Read(./vw/.env)"
+      "Read(./.env)"
     ]
   }
 }
