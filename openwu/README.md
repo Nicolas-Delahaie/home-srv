@@ -40,8 +40,8 @@ Source of truth: [`presets.json`](./presets.json), in the API's own payload shap
 Values:
 
 - `num_ctx`: measured per model → [`bench.md`](./bench.md). A Modelfile's own `num_ctx` is a packaging guard rail, never a target: the preset is always meant to override it, and a preset that omits it inherits that guard rail instead.
-- Sampling: only to deviate from the packaged Modelfile profile (`ollama show <tag>`). `coding-s` → Instruct/General, `coding-m` → Thinking/Precise coding. Sources: [Qwen3.5-4B](https://huggingface.co/Qwen/Qwen3.5-4B), [Qwen3.5-9B](https://huggingface.co/Qwen/Qwen3.5-9B).
-- Both cards: parameter support varies across inference frameworks → check `ollama show`, never assume.
+- Sampling: only to deviate from the packaged Modelfile profile (`ollama show <tag>`). `coding-s` → Instruct/General. Source: [Qwen3.5-4B](https://huggingface.co/Qwen/Qwen3.5-4B).
+- Model cards: parameter support varies across inference frameworks → check `ollama show`, never assume.
 - Omitted → falls through to the Modelfile.
 
 Import does not fetch the model. A `base_model_id` the backend lacks → preset looks healthy, fails on the first message. Pull first: _Admin Panel → Settings → Connections_, **Manage** on the Mac's connection. The modal is bound to the connection it was opened from.
