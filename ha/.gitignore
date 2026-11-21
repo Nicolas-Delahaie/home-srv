@@ -3,3 +3,8 @@
 /config/*
 !/config/configuration.yaml
 !/config/iaquk.yaml
+!/config/blueprints/
+/config/blueprints/*
+!/config/blueprints/automation/
+/config/blueprints/automation/*
+!/config/blueprints/automation/local/

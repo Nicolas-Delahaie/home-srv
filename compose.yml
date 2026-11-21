@@ -126,6 +126,7 @@ services:
       - no-new-privileges:true
     volumes:
       - z2m_data:/app/data
+    env_file: ./z2m/.env # Static configuration
     devices:
       - /dev/serial/by-id/${ZIGBEE_USB}:/dev/ttyUSB0
     environment:

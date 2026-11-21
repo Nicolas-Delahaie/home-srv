@@ -1,0 +1,43 @@
+blueprint:
+  name: TRVZB external temperature
+  description: Push a room temperature sensor to a SONOFF TRVZB external temperature input.
+  domain: automation
+  input:
+    sensor:
+      name: Room temperature sensor
+      selector:
+        entity:
+          filter:
+            domain: sensor
+            device_class: temperature
+    target:
+      name: TRV external temperature input
+      selector:
+        entity:
+          filter:
+            domain: number
+
+mode: queued
+
+variables:
+  sensor: !input sensor
+
+triggers:
+  - trigger: state
+    entity_id: !input sensor
+    not_to: [unknown, unavailable]
+  # The sensor only reports on change: resend so the TRV never falls back to its internal probe
+  - trigger: time_pattern
+    minutes: "/30"
+
+conditions:
+  - "{{ states(sensor) | is_number }}"
+  # Skip sub-0.1 °C changes: every write wakes the battery TRV
+  - "{{ trigger.from_state is not defined or trigger.from_state.state | float(0) | round(1) != states(sensor) | float | round(1) }}"
+
+actions:
+  - action: number.set_value
+    target:
+      entity_id: !input target
+    data:
+      value: "{{ states(sensor) | float | round(1) }}"

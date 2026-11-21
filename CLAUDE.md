@@ -103,6 +103,7 @@ Consult these files based on the task context:
 | Local network / APIPA                  | `docs/offline-network.md`     |
 | Router / DNS configuration             | `docs/router-setup.md`        |
 | Local DNS (dnsmasq)                    | `docs/dnsmasq.md`             |
+| Heating / TRVs / resilience            | `docs/heating.md`             |
 
 Service subdirectories also contain `CLAUDE.md` files with service-specific rules:
 
