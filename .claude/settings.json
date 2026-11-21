@@ -10,7 +10,8 @@
       "Bash(git tag *)",
       "Bash(git branch -D *)",
       "Bash(git checkout *)",
-      "Bash(git switch *)"
+      "Bash(git switch *)",
+      "Bash(docker compose *)"
     ],
     "deny": [
       "Bash(git push --force)",
