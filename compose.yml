@@ -146,6 +146,7 @@ services:
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
       - ./mosquitto/entrypoint.sh:/entrypoint.sh:ro
+      - mosquitto_data:/mosquitto/data
       - /etc/localtime:/etc/localtime:ro
     environment:
       - MQTT_LAN_USER
@@ -405,6 +406,7 @@ volumes:
   z2m_data:
   traefik_certs:
   crowdsec_data:
+  mosquitto_data:
   hermes_data:
   open_webui_datas:
   immichdb_data:
