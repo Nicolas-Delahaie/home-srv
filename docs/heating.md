@@ -45,14 +45,14 @@ flowchart LR
 
 ## Failure matrix
 
-| Failure                                   | Effect                                                     | Manual action             |
-| ----------------------------------------- | ---------------------------------------------------------- | ------------------------- |
-| Server / HA / MQTT / Z2M / coordinator    | TRVs on internal probe, last setpoint kept                 | None                      |
-| Room thermometer                          | TRV on internal probe until the sensor reports again       | Fix the sensor            |
-| TRV reboot (batteries, OTA)               | Settings reset, re-applied automatically; `system_mode` not | Check `heat` after an OTA |
-| TRV battery low                           | TRV-ZBT: valve 30 % open. TRVZB: no fallback               | Replace batteries         |
-| TRV dead or removed                       | Valve body fully open → radiator heats freely              | Swap the head             |
-| eBUS adapter / ebusd, central thermostat  | Boiler on the remaining controller                         | See ebusd doc             |
+| Failure                                  | Effect                                                      | Manual action             |
+| ---------------------------------------- | ----------------------------------------------------------- | ------------------------- |
+| Server / HA / MQTT / Z2M / coordinator   | TRVs on internal probe, last setpoint kept                  | None                      |
+| Room thermometer                         | TRV on internal probe until the sensor reports again        | Fix the sensor            |
+| TRV reboot (batteries, OTA)              | Settings reset, re-applied automatically; `system_mode` not | Check `heat` after an OTA |
+| TRV battery low                          | TRV-ZBT: valve 30 % open. TRVZB: no fallback                | Replace batteries         |
+| TRV dead or removed                      | Valve body fully open → radiator heats freely               | Swap the head             |
+| eBUS adapter / ebusd, central thermostat | Boiler on the remaining controller                          | See ebusd doc             |
 
 ## Rebuild from scratch
 

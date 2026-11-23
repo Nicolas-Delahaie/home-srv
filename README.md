@@ -141,6 +141,10 @@ Setup guide for a home server and various configurations. Although based on a Sh
     1. A [fine-grained PAT](https://github.com/settings/personal-access-tokens/new) scoped to this repo, distinct from the server's push token ([Git Repository Access](docs/remote-access.md#git-repository-access-github-pat)), with **Administration** (read/write) → `.env`'s `RUNNER_ACCESS_TOKEN` — without it the runner never registers.
     2. A [GitHub App](https://github.com/settings/apps/new) for Renovate, installed on this repo only, with **Contents**, **Pull requests**, **Issues** and **Workflows** (all read/write): the App ID goes into repository variable `RENOVATE_APP_ID` (_Settings → Secrets and variables → Actions → Variables_) and the private key into repository secret `RENOVATE_APP_PRIVATE_KEY`.
 
+12. eBUS Adapter Stick C6 (`ebusd`), via its web UI (`http://<EBUSD_ADAPTER_IP>`):
+    1. MQTT URL: `mqtt://<MQTT_LAN_USER>:<MQTT_LAN_PASSWORD>@<SERVER_IP>:8883` + Home Assistant discovery on → stick status and firmware update entity in HA.
+    2. Internet blocked for the stick (router parental control) → lift it during a firmware update: the stick downloads the firmware itself.
+
 ## Continuous Integration
 
 The `gharunner` service is an ordinary service, started like any other. It handles Renovate update PRs and the automatic deploy — which redeploys every service except `gharunner` itself, since recreating it would kill the job mid-run.

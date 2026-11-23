@@ -13,7 +13,7 @@ Covers home automation, video surveillance, password management, media streaming
 - **Orchestration**: Docker Compose (single `compose.yml` file)
 - **Reverse proxy**: Traefik (SSL/TLS via Let's Encrypt, OVH DNS challenge)
 - **Authentication**: Authelia (SSO, 2FA, ForwardAuth via Traefik)
-- **Home automation**: Home Assistant + Zigbee2MQTT + Mosquitto (MQTT)
+- **Home automation**: Home Assistant + Zigbee2MQTT + Mosquitto (MQTT) + ebusd (boiler eBUS)
 - **Video surveillance**: Frigate (AI detection) + go2rtc (RTSP streaming)
 - **Passwords**: Vaultwarden
 - **Photo/video management**: Immich (server + machine learning + Postgres/pgvector + Valkey)
@@ -39,6 +39,7 @@ cs/config/                     # CrowdSec (parsers, scenarios, collections)
 vw/                            # Vaultwarden
 glances/                       # System monitoring config
 grdf/                          # Gas meter readings (Gazpar)
+ebusd/                         # Boiler eBUS → MQTT (options in .env)
 home-srv.service               # systemd service to auto-start Docker Compose on boot
 docs/                          # Documentation (setup, access, network, drawio)
 ```

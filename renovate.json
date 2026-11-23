@@ -40,6 +40,12 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/open-webui/open-webui"],
       "fetchChangeLogs": "off"
+    },
+    {
+      "description": "Upstream image exposes no org.opencontainers.image.source label",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["john30/ebusd"],
+      "sourceUrl": "https://github.com/john30/ebusd"
     }
   ],
   "customManagers": []

@@ -309,6 +309,19 @@ services:
       mosquitto:
         condition: service_healthy
 
+  ebusd:
+    image: john30/ebusd:v26.1
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    env_file: ./ebusd/.env # Static configuration
+    environment: # Dynamic configuration
+      - EBUSD_DEVICE=ens:${EBUSD_ADAPTER_IP}:9999
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+
   cs:
     image: crowdsecurity/crowdsec:v1.8.2-debian
     security_opt:
